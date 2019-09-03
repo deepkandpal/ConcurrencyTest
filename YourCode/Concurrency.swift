@@ -76,9 +76,20 @@ func loadMessage(completion: @escaping (String) -> Void) {
         group.leave()
     }
     
-    group.notify(queue: .main)
+    if group.wait(wallTimeout: DispatchWallTime.now() + .seconds(2)) == .timedOut {
+        
+        message = "Unable to load message - Time out exceeded"
+        DispatchQueue.main.async {
+            completion(message)
+        }
+    }
+    
+    else
     {
+        group.notify(queue: .main)
+        {
         completion(message)
+        }
         
     }
     
