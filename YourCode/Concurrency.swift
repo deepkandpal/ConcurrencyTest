@@ -52,13 +52,39 @@ import Foundation
 ///
 func loadMessage(completion: @escaping (String) -> Void) {
     
+    var message : String = ""
+    
+    let group = DispatchGroup()
+    group.enter()
+    
     fetchMessageOne { (messageOne) in
+        if(!message.isEmpty)
+        {
+            message = message + " "
+        }
+        message = message + messageOne
+        group.leave()
     }
     
+    group.enter()
     fetchMessageTwo { (messageTwo) in
+        if(!message.isEmpty)
+        {
+            message = message + " "
+        }
+        message = message + messageTwo
+        group.leave()
+    }
+    
+    group.notify(queue: .main)
+    {
+        completion(message)
+        
     }
     
     /// The completion handler that should be called with the joined messages from fetchMessageOne & fetchMessageTwo
+    
     /// Please delete this comment before submission.
-    completion("Good morning!")
+    
+    // completion("Good morning!")
 }
