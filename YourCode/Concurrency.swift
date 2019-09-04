@@ -52,47 +52,46 @@ import Foundation
 ///
 func loadMessage(completion: @escaping (String) -> Void) {
     
+  
+  DispatchQueue.global(qos: .background).async {
+    
     var message : String = ""
-    
     let group = DispatchGroup()
-    group.enter()
     
+    group.enter()
     fetchMessageOne { (messageOne) in
-        if(!message.isEmpty)
-        {
-            message = message + " "
-        }
-        message = message + messageOne
-        group.leave()
+      if(!message.isEmpty){
+        message = message + " "
+      }
+      message = message + messageOne
+      group.leave()
     }
     
     group.enter()
     fetchMessageTwo { (messageTwo) in
-        if(!message.isEmpty)
-        {
-            message = message + " "
-        }
-        message = message + messageTwo
-        group.leave()
+      if(!message.isEmpty){
+        message = message + " "
+      }
+      message = message + messageTwo
+      group.leave()
     }
     
     if group.wait(wallTimeout: DispatchWallTime.now() + .seconds(2)) == .timedOut {
-        
-        message = "Unable to load message - Time out exceeded"
-        DispatchQueue.main.async {
-            completion(message)
-        }
-    }
-    
-    else
-    {
-        group.notify(queue: .main)
-        {
+      
+      message = "Unable to load message - Time out exceeded"
+      DispatchQueue.main.async {
         completion(message)
-        }
-        
+      }
     }
-    
+      
+    else{
+      group.notify(queue: .main){
+        completion(message)
+      }
+    }
+  }
+  
+  
     /// The completion handler that should be called with the joined messages from fetchMessageOne & fetchMessageTwo
     
     /// Please delete this comment before submission.
