@@ -52,10 +52,10 @@ import Foundation
 ///
 func loadMessage(completion: @escaping (String) -> Void) {
     
-  
-  DispatchQueue.global(qos: .background).async {
+  var message : String = ""
+
+ DispatchQueue.global(qos: .background).async {
     
-    var message : String = ""
     let group = DispatchGroup()
     
     group.enter()
