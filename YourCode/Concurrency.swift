@@ -91,10 +91,4 @@ func loadMessage(completion: @escaping (String) -> Void) {
     }
   }
   
-  
-    /// The completion handler that should be called with the joined messages from fetchMessageOne & fetchMessageTwo
-    
-    /// Please delete this comment before submission.
-    
-    // completion("Good morning!")
 }
